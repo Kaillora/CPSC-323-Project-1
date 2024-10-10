@@ -16,7 +16,6 @@ def remove_comments(file):
 
 #Tokenize the printed output and categorize it in tabular form
 def tokenizer(code):
-    tokens = code.split()
     total_tokens = 0
     keywords = ['int', 'char', 'float', 'if', 'else', 'for', 'while', 'return', 'void', 'print', 'def']
     operators = ['+', '-', '*', '/', '%', '=']
@@ -26,21 +25,20 @@ def tokenizer(code):
     separator = []
     identifier = []
     literal = []
-    total_tokens = 0
     
-    for token in tokens:
-        tokens = tokenize.generate_tokens(StringIO(code).read)
+    tokens = tokenize.generate_tokens(StringIO(code).read)
+    for toknum, tokval, _, _, _, in tokens:
         total_tokens += 1
-        if token in keywords:
-            keyword.append(token)
-        elif token in operators:
-            operator.append(token)
-        elif token in separators:
-            separator.append(token)
-        elif (token.startswith("'") and token.endswith("'")) or token.isdigit():
-            literal.append(token)
-        else:
-            identifier.append(token)
+        if tokval in keywords:
+            keyword.append(tokval)
+        elif tokval in operators:
+            operator.append(tokval)
+        elif tokval in separators:
+            separator.append(tokval)
+        elif toknum == tokenize.NAME:
+            identifier.append(tokval)
+        elif toknum == tokenize.NUMBER or toknum == tokenize.STRING:
+            literal.append(tokval)
             
     print('Keywords: ', list(set(keyword)))
     print('Operators: ', list(set(operator)))
@@ -50,10 +48,12 @@ def tokenizer(code):
     print('Token Count: ', total_tokens)
     
 new_code = remove_comments(file)
+print('\nCode without comments and whitespaces: ')
 for line in new_code:
     print(line)
     
 tokenized_code = ' '.join(new_code)
+print('\nTokenization and token count: ')
 tokenizer(tokenized_code)
 
              
