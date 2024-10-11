@@ -14,7 +14,7 @@ def remove_comments(file):
                 result.append(line)
     return result
 
-#Tokenize the printed output and categorize it in tabular form
+#Create arrays for common keywords, operators, and separators that can be detected from the example code.
 def tokenizer(code):
     total_tokens = 0
     keywords = ['int', 'char', 'float', 'if', 'else', 'for', 'while', 'return', 'void', 'print', 'def']
@@ -26,6 +26,7 @@ def tokenizer(code):
     identifier = []
     literal = []
     
+    #This tokenizes each keyword, operator, separator, identifier, and literal and puts them into their respective lists.
     tokens = tokenize.generate_tokens(StringIO(code).read)
     for toknum, tokval, _, _, _, in tokens:
         total_tokens += 1
@@ -40,18 +41,21 @@ def tokenizer(code):
         elif toknum == tokenize.NUMBER or toknum == tokenize.STRING:
             literal.append(tokval)
             
+    #Print the tokenized code into a table without repeating tokens and print the total token count.
     print('Keywords: ', list(set(keyword)))
     print('Operators: ', list(set(operator)))
     print('Separators: ', list(set(separator)))
     print('Identifiers: ', list(set(identifier)))
     print('Literals: ', list(set(literal)))
     print('Token Count: ', total_tokens)
-    
+
+#Print the new output with comments and whitespaces removed.
 new_code = remove_comments(file)
 print('\nCode without comments and whitespaces: ')
 for line in new_code:
     print(line)
-    
+
+#Print the function of the tokenized code and token count.  
 tokenized_code = ' '.join(new_code)
 print('\nTokenization and token count: ')
 tokenizer(tokenized_code)
